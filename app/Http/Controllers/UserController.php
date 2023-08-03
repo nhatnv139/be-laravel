@@ -70,6 +70,6 @@ class UserController extends Controller
         // $users = new Users();
         // $usersList = $users->getAllUsers();
         // dd($usersList);
-        return view('clients.users.edit', compact('title'));
+        return view('clients.users.edit', compact('title', 'userDetail'));
     }
 }

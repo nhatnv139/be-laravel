@@ -26,7 +26,7 @@
             <th>{{ $item->email }}</th>
             <th>{{ $item->create_at }}</th>
             <th><a href="{{ route('users.edit', ['id'=>$item->id]) }}"> Edit</a></th>
-            {{-- <th><a href="{{ route('users.post-edit', ['id'=>$item->id]) }}"> Delete</a></th> --}}
+            <th><a href="{{ route('users.post-edit', ['id'=>$item->id]) }}"> Delete</a></th>
         </tr>
         @endforeach
         @else 

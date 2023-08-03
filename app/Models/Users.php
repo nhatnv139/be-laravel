@@ -23,6 +23,6 @@ class Users extends Model
     }
     public function  getDetail($id)
     {
-        DB::select('SELECT*FROM ' . $this->table . ' WHERE id =?', [$id]);
+       return DB::select('SELECT*FROM ' . $this->table . ' WHERE id =?', [$id]);
     }
 }
