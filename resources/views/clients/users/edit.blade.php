@@ -7,7 +7,7 @@
 {{-- <a href="#" class="btn btn-primary">Add User</a> --}}
 <hr>
 
-<form action="" method="POST">
+<form action="{{route('users.post-edit')}}" method="POST">
     <div class="mb-3">
         <label for="FullName"></label>
         <input type="text" class="form-control" name="fullname" placeholder="name" value="{{ old('fullname') ?? $userDetail->fullname }}">

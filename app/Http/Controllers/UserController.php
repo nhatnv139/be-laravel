@@ -52,13 +52,13 @@ class UserController extends Controller
         $this->users->addUser($dataInsert);
         return redirect()->route('users.index')->with('msg', 'add user success');
     }
-    public function getEdit($id = 0)
+    public function getEdit(Request $request ,$id = 0)
     {
         $title = "Update user";
         if (!empty($id)) {
             $userDetail = $this->users->getDetail($id);
             if (!empty($userDetail[0])) {
-                # code...
+                $request->sessiton()->store('id',$id);
                 $userDetail = $userDetail[0];
             } else {
                 return redirect()->route('users.index')->with('msg', 'nguoi dung ko ton tai');
@@ -66,10 +66,30 @@ class UserController extends Controller
         } else {
             return redirect()->route('users.index')->with('msg', 'user ko exxit');
         }
-
-        // $users = new Users();
-        // $usersList = $users->getAllUsers();
-        // dd($usersList);
         return view('clients.users.edit', compact('title', 'userDetail'));
+    }
+    public function postEdit(Request $request){
+        $id = session('id');
+        if(empty($id)){
+            return back()->with('msg','lien ket ko ton tai');
+        }
+        $request->validate([
+            'fullname' => 'required|min:5',
+            'email' => 'required|email|unique:users,email,' .$id
+        ], [
+            'fullname.required' => 'fullname is required',
+            'fullname.min' => 'fullname must from :min systact up',
+            'email.required' => 'Email is required',
+            'email.email' => 'Email is not the rule',
+            // 'email.unique' => 'Email is exit',
+
+        ]);
+        $dataUpdate =[
+            $request->fullname,
+            $request->email,
+            date('Y-m-d H:i:s')
+        ];
+        $this->users->updateUser($dataUpdate,$id);
+        return back()-> with('msg','update user');
     }
 }

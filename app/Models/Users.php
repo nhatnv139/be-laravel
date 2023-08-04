@@ -25,4 +25,9 @@ class Users extends Model
     {
        return DB::select('SELECT*FROM ' . $this->table . ' WHERE id =?', [$id]);
     }
+    public function  updateUser($data,$id)
+    {
+        $data[] = $id;
+       return DB::update('UPDATE' . $this->table . ' SET fullname=?, email=?, create_at=? where id =?' , $data);
+    }
 }
