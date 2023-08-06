@@ -23,11 +23,25 @@ class Users extends Model
     }
     public function  getDetail($id)
     {
-       return DB::select('SELECT*FROM ' . $this->table . ' WHERE id =?', [$id]);
+        return DB::select('SELECT*FROM ' . $this->table . ' WHERE id =?', [$id]);
     }
-    public function  updateUser($data,$id)
+    public function  updateUser($data, $id)
     {
         $data[] = $id;
-       return DB::update('UPDATE' . $this->table . ' SET fullname=?, email=?, create_at=? where id =?' , $data);
+        return DB::update('UPDATE' . $this->table . ' SET fullname=?, email=?, create_at=? where id =?', $data);
+    }
+    public function queryBuilder()
+    {
+        // DB::enableQueryBuilder();
+        // lấy tất cả bản gghi 
+        //   DB::table($this->table)
+
+        // ->get();
+
+        $list = DB::table('users')
+            ->select('users.*', 'groups.name as group_name')
+            ->rightJoin('groups', 'users.group_id', '=', 'groups.id')
+            ->get();
+        dd($list);
     }
 }

@@ -18,8 +18,9 @@ class UserController extends Controller
     public function index()
     {
         $title = "Danh sach nguoi dung";
+        $usersList = $this->users->queryBuilder();
         // $users = new Users();
-        $usersList =  $this->users->getAllUsers();
+        // $usersList =  $this->users->getAllUsers();
         // dd($usersList);
         return view('clients.users.lists', compact('title', 'usersList'));
     }
@@ -52,13 +53,13 @@ class UserController extends Controller
         $this->users->addUser($dataInsert);
         return redirect()->route('users.index')->with('msg', 'add user success');
     }
-    public function getEdit(Request $request ,$id = 0)
+    public function getEdit(Request $request, $id = 0)
     {
         $title = "Update user";
         if (!empty($id)) {
             $userDetail = $this->users->getDetail($id);
             if (!empty($userDetail[0])) {
-                $request->sessiton()->store('id',$id);
+                $request->session()->put('id', $id);
                 $userDetail = $userDetail[0];
             } else {
                 return redirect()->route('users.index')->with('msg', 'nguoi dung ko ton tai');
@@ -68,14 +69,16 @@ class UserController extends Controller
         }
         return view('clients.users.edit', compact('title', 'userDetail'));
     }
-    public function postEdit(Request $request){
+    public function postEdit(Request $request)
+    {
+        // dd(session('id'));
         $id = session('id');
-        if(empty($id)){
-            return back()->with('msg','lien ket ko ton tai');
+        if (empty($id)) {
+            return back()->with('msg', 'lien ket ko ton tai');
         }
         $request->validate([
             'fullname' => 'required|min:5',
-            'email' => 'required|email|unique:users,email,' .$id
+            'email' => 'required|email|unique:users,email,' . $id
         ], [
             'fullname.required' => 'fullname is required',
             'fullname.min' => 'fullname must from :min systact up',
@@ -84,12 +87,12 @@ class UserController extends Controller
             // 'email.unique' => 'Email is exit',
 
         ]);
-        $dataUpdate =[
+        $dataUpdate = [
             $request->fullname,
             $request->email,
             date('Y-m-d H:i:s')
         ];
-        $this->users->updateUser($dataUpdate,$id);
-        return back()-> with('msg','update user');
+        $this->users->updateUser($dataUpdate, $id);
+        return back()->with('msg', 'update user');
     }
 }
